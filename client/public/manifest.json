@@ -1,0 +1,22 @@
+{
+  "name": "Jungle Jump: Snakes & Ladders",
+  "short_name": "Jungle Jump",
+  "description": "A fun snakes and ladders game for kids!",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#f0fdf4",
+  "theme_color": "#059669",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "/icon-192.png",
+      "type": "image/png",
+      "sizes": "192x192"
+    },
+    {
+      "src": "/icon-512.png",
+      "type": "image/png",
+      "sizes": "512x512"
+    }
+  ]
+}
