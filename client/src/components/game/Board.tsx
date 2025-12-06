@@ -121,7 +121,7 @@ export function Board({ players, activePlayerId }: BoardProps) {
       </div>
 
       {/* Snakes and Ladders SVG Overlay */}
-      <svg className="absolute inset-0 w-full h-full pointer-events-none z-20 overflow-visible">
+      <svg className="absolute inset-0 w-full h-full pointer-events-none z-20 overflow-visible" viewBox="0 0 100 100" preserveAspectRatio="none">
         <defs>
           <linearGradient id="ladderGradient" x1="0%" y1="0%" x2="100%" y2="0%">
             <stop offset="0%" stopColor="#8B4513" />
@@ -129,7 +129,7 @@ export function Board({ players, activePlayerId }: BoardProps) {
             <stop offset="100%" stopColor="#8B4513" />
           </linearGradient>
           <filter id="shadow">
-            <feDropShadow dx="2" dy="2" stdDeviation="1" floodOpacity="0.3" />
+            <feDropShadow dx="0.5" dy="0.5" stdDeviation="0.5" floodOpacity="0.3" />
           </filter>
         </defs>
 
@@ -141,9 +141,9 @@ export function Board({ players, activePlayerId }: BoardProps) {
              // Simple ladder visualization
             return (
               <g key={`ladder-${i}`} filter="url(#shadow)">
-                <line x1={`${start.x}%`} y1={`${start.y}%`} x2={`${end.x}%`} y2={`${end.y}%`} stroke="url(#ladderGradient)" strokeWidth="6" strokeLinecap="round" />
+                <line x1={start.x} y1={start.y} x2={end.x} y2={end.y} stroke="url(#ladderGradient)" strokeWidth="1.5" strokeLinecap="round" />
                 {/* Rungs - approximated */}
-                <line x1={`${start.x}%`} y1={`${start.y}%`} x2={`${end.x}%`} y2={`${end.y}%`} stroke="#DEB887" strokeWidth="3" strokeDasharray="4 4" strokeLinecap="round" />
+                <line x1={start.x} y1={start.y} x2={end.x} y2={end.y} stroke="#DEB887" strokeWidth="0.8" strokeDasharray="1 1" strokeLinecap="round" />
               </g>
             );
           } else {
@@ -151,7 +151,7 @@ export function Board({ players, activePlayerId }: BoardProps) {
             // Control points to make it wavy
             const midX = (start.x + end.x) / 2;
             const midY = (start.y + end.y) / 2;
-            const curve = 20; // waviness
+            const curve = 5; // waviness scaled for 100x100 viewBox
             
             // Randomize curve direction slightly based on index
             const dir = i % 2 === 0 ? 1 : -1;
@@ -162,21 +162,21 @@ export function Board({ players, activePlayerId }: BoardProps) {
                   d={`M ${start.x} ${start.y} Q ${midX + (curve * dir)} ${midY} ${end.x} ${end.y}`}
                   fill="none"
                   stroke="#22c55e"
-                  strokeWidth="6"
+                  strokeWidth="1.5"
                   strokeLinecap="round"
                 />
                 <path 
                   d={`M ${start.x} ${start.y} Q ${midX + (curve * dir)} ${midY} ${end.x} ${end.y}`}
                   fill="none"
                   stroke="#4ade80"
-                  strokeWidth="3"
+                  strokeWidth="0.6"
                   strokeLinecap="round"
-                  strokeDasharray="2 2"
+                  strokeDasharray="0.5 0.5"
                 />
                 {/* Snake Head at Start (Top) */}
-                <circle cx={`${start.x}%`} cy={`${start.y}%`} r="1.5%" fill="#22c55e" />
-                <circle cx={`${start.x}%`} cy={`${start.y}%`} r="0.5%" fill="black" transform={`translate(-1, -1)`} />
-                <circle cx={`${start.x}%`} cy={`${start.y}%`} r="0.5%" fill="black" transform={`translate(1, -1)`} />
+                <circle cx={start.x} cy={start.y} r="0.4" fill="#22c55e" />
+                <circle cx={start.x} cy={start.y} r="0.15" fill="black" transform={`translate(-0.2, -0.2)`} />
+                <circle cx={start.x} cy={start.y} r="0.15" fill="black" transform={`translate(0.2, -0.2)`} />
               </g>
             );
           }

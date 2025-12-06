@@ -99,7 +99,7 @@ export function Game({ initialPlayers, onExit }: GameProps) {
     }
 
     // Move player logic
-    updatePlayerPosition(activePlayerIndex, newPosition, () => {
+    updatePlayerPosition(activePlayerIndex, newPosition, (currentPlayers) => {
       // Check for win
       if (newPosition === 100) {
         handleWin();
@@ -117,26 +117,26 @@ export function Game({ initialPlayers, onExit }: GameProps) {
             variant: special.type === 'snake' ? "destructive" : "default",
           });
           
-          updatePlayerPosition(activePlayerIndex, special.end, () => {
-             endTurn(roll);
+          updatePlayerPosition(activePlayerIndex, special.end, (finalPlayers) => {
+             endTurn(roll, finalPlayers);
           });
         }, 800);
       } else {
-        endTurn(roll);
+        endTurn(roll, currentPlayers);
       }
     });
   };
 
-  const updatePlayerPosition = (index: number, pos: number, callback?: () => void) => {
+  const updatePlayerPosition = (index: number, pos: number, callback?: (updatedPlayers: Player[]) => void) => {
     const newPlayers = [...players];
     newPlayers[index] = { ...newPlayers[index], position: pos };
     setPlayers(newPlayers);
     
     // Allow animation to complete before callback
-    if (callback) setTimeout(callback, 500);
+    if (callback) setTimeout(() => callback(newPlayers), 500);
   };
 
-  const endTurn = (lastRoll: number) => {
+  const endTurn = (lastRoll: number, currentPlayers: Player[]) => {
     // If rolled a 6, get another turn? Standard rule.
     if (lastRoll === 6) {
       setStatusMessage(`${currentPlayer.name} rolled a 6! Roll again!`);
@@ -144,10 +144,10 @@ export function Game({ initialPlayers, onExit }: GameProps) {
       return; // Keep active player index same
     }
 
-    const nextIndex = (activePlayerIndex + 1) % players.length;
+    const nextIndex = (activePlayerIndex + 1) % currentPlayers.length;
     
     // Update isTurn flags
-    const updatedPlayers = players.map((p, i) => ({
+    const updatedPlayers = currentPlayers.map((p, i) => ({
       ...p,
       isTurn: i === nextIndex
     }));
@@ -201,8 +201,7 @@ export function Game({ initialPlayers, onExit }: GameProps) {
                 disabled={isRolling}
                 className={cn(
                   "w-full max-w-[200px] text-xl h-14 rounded-xl game-btn font-display tracking-widest",
-                  currentPlayer.color.replace('bg-', 'bg-').replace('500', '600'),
-                  "hover:brightness-110 text-white"
+                  "bg-emerald-600 hover:bg-emerald-500 text-white border-b-4 border-emerald-800 active:border-b-0 active:mt-1 shadow-lg"
                 )}
               >
                 {isRolling ? "Rolling..." : "ROLL DICE"}
