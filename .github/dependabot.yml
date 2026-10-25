@@ -1,0 +1,20 @@
+# Dependabot version updates: a weekly check of the npm dependencies (package.json and
+# package-lock.json). Minor and patch bumps share one pull request, and each major bump gets its
+# own, since a major is the change most likely to break something. No workflow runs on a pull
+# request, so build and try a proposal locally before merging it. Security updates are switched
+# on in the repository settings.
+version: 2
+updates:
+  - package-ecosystem: "npm"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    commit-message:
+      prefix: "chore"
+    groups:
+      npm-minor-and-patch:
+        patterns:
+          - "*"
+        update-types:
+          - "minor"
+          - "patch"
